@@ -52,7 +52,16 @@ logger.settings.useTime = false; // 关闭时间输出;
 效果如下:<br/>
 ![Tested Effect](Tested3.png)
 <br/>
-注意: 当 `logger.settings.useDate` 为 `false` 时, 将不会输出所有日期的格式.<br/>
+> 注意: 当 `logger.settings.useDate` 为 `false` 时, 将不会输出所有日期的格式.<br/>
+
+
+#### 2. [Object:OwO]
+一个通用方法合集. 目前开发进度如下:
+[x] 模拟睡眠方法 (`owo.sleep(second: int|float)`)
+[x] 高亮容器方法 (`owo.highlight(elementName: string, func: callable)`)
+
+
+<hr/>
 当前版本仅为30分钟开发版, 没有在多平台进行测试, 但目前可保证 `Microsoft Edge` 以及 `Google Chrome` 可以完美使用.<br/>
 
 
@@ -60,7 +69,7 @@ logger.settings.useTime = false; // 关闭时间输出;
 
 
 ## Statement
-&copy; 2016-2021 [`OwOBlog-DGMT`](https://www.owoblog.com). Please comply with the open source license of this project for modification, derivative or commercial use of this project.
+&copy; 2016-2022 [`OwOBlog-DGMT`](https://www.owoblog.com). Please comply with the open source license of this project for modification, derivative or commercial use of this project.
 
 > My Contacts:
 - Website: [`HanskiJay`](https://www.owoblog.com)

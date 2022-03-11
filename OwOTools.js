@@ -16,6 +16,46 @@
 **********************************************************************/
 
 
+
+/**
+ * [OwO] 通用方法合集
+ */
+const owo = {
+  path(layer = 'end') {
+    let path = location.pathname.split('/').filter(function(e){return e});
+    if(typeof layer === 'number') {
+      return path[layer] ?? undefined;
+    }
+    switch(layer.toLowerCase()) {
+      case 'first':
+        return path.shift();
+      case 'end':
+        return path.pop();
+    }
+  },
+  sleep(time) {
+    // 需要配合 async/await 使用;
+    return new Promise((resolve) => setTimeout(resolve, time * 1000));
+  },
+  highlight: {
+    style:   'border: 10px solid red; box-shadow: 0 0 5px 5px #a96464',
+    selector: null,
+    shoot(className, func) {
+      let selector = document.querySelector(className);
+      if(selector == null) {
+        logger.error('Class \'' + className + '\' is undefined!');
+        return;
+      }
+      this.selector = selector;
+      if(typeof func === 'function') func(this);
+      selector.style = this.style;
+      logger.info('High lighted class \'' + className + '\'.');
+    }
+  }
+};
+
+
+
 /**
  * [Logger] 日志输出对象
  */
