@@ -40,16 +40,21 @@ const owo = {
   highlight: {
     style:   'border: 10px solid red; box-shadow: 0 0 5px 5px #a96464',
     selector: null,
-    shoot(className, func) {
-      let selector = document.querySelector(className);
-      if(selector == null) {
-        logger.error('Class \'' + className + '\' is undefined!');
+    shoot(element, func) {
+      let selector;
+      if(typeof element === 'string') {
+        selector = document.querySelector(element);
+      }
+      else if(typeof element === 'object') {
+        selector = element;
+      } else {
+        logger.error('Class \'' + element + '\' is undefined!');
         return;
       }
       this.selector = selector;
       if(typeof func === 'function') func(this);
       selector.style = this.style;
-      logger.info('High lighted class \'' + className + '\'.');
+      logger.info('High lighted class \'' + selector.className + '\'.');
     }
   }
 };
@@ -69,8 +74,8 @@ const logger = {
         return 'background-color: ' + primaryColor + '; color: ' + secondColor + '; font-weight: ' + weight + '; ';
       },
       basePadding: 'padding: 2px 3px; ',
-      level:   'border-radius: 5px 0 0 5px; ',
-      message: 'border-radius: 0 5px 5px 0; ',
+      level:   '',
+      message: '',
       time:    ['#424242', 'white', 200]
     },
   },
@@ -81,7 +86,7 @@ const logger = {
     let month = date.getMonth();
     let day   = date.getDate();
     let time  = '';
-    if(this.settings.useTime == true) {
+    if(this.settings.useTime === true) {
       time = ' ' + fillZero(date.getHours()) + ':' + fillZero(date.getMinutes()) + ':' + fillZero(date.getSeconds());
     }
     return year + this.settings.bindTag + fillZero(month) + this.settings.bindTag + fillZero(day) + time;
@@ -90,6 +95,10 @@ const logger = {
     let colorFormat = {};
     // 颜色编辑区域;
     colorFormat.info = {
+      prefix:   ['#607D8B', 'white', 'bold'],
+      text: ['white']
+    };
+    colorFormat.notice = {
       prefix:   ['#15AC', 'white', 'bold'],
       text: ['white']
     };
@@ -121,13 +130,15 @@ const logger = {
       this.settings.style.basePadding + this.settings.style.colorFormat(...colorFormat[level].prefix) + this.settings.style.level,
       this.settings.style.basePadding + this.settings.style.colorFormat(...colorFormat[level].text) + this.settings.style.message
     ];
-    if(this.settings.useDate == true) {
+    if(this.settings.useDate === true) {
       result.unshift(this.settings.style.basePadding + this.settings.style.colorFormat(...this.settings.style.time));
     }
+    result[0] += '; border-radius: 3px 0 0 3px;';
+    result[result.length - 1] += '; border-radius: 0 3px 3px 0';
     return result;
   },
   getDateFormat() {
-    if(this.settings.useDate == true) {
+    if(this.settings.useDate === true) {
       return '%c ' + this.date(this.settings.useTime, this.settings.bindTag) + ' ';
     }
     return '';
@@ -138,6 +149,7 @@ const logger = {
     switch(level) {
       default:
       case 'info':
+      case 'notice':
       case 'success':
       case 'alert':
       case 'error':
@@ -153,10 +165,13 @@ const logger = {
       break;
     }
     console[consoleOutPutType](this.getDateFormat() + '%c ' + level.toUpperCase() + ' %c ' + message + ' ', ...this.format(level));
-    (boom == true) ? alert(message) : '';
+    (boom === true) ? alert(message) : '';
   },
   info(message, boom = false) {
     this.send(message, 'info', boom);
+  },
+  notice(message, boom = false) {
+    this.send(message, 'notice', boom);
   },
   success(message, boom = false) {
     this.send(message, 'success', boom);
