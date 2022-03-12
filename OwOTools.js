@@ -21,17 +21,20 @@
  * [OwO] 通用方法合集
  */
 const owo = {
-  path(layer = 'end') {
-    let path = location.pathname.split('/').filter(function(e){return e});
+  splitURL(url, layer) {
+		let splitted = url.split('/').filter((e) => { return e; });
     if(typeof layer === 'number') {
-      return path[layer] ?? undefined;
+      return splitted[layer] ?? undefined;
     }
-    switch(layer.toLowerCase()) {
-      case 'first':
-        return path.shift();
-      case 'end':
-        return path.pop();
+    switch (layer.toLowerCase()) {
+    case 'first':
+      return splitted.shift();
+    case 'end':
+      return splitted.pop();
     }
+  },
+  path(layer = 'end') {
+    return this.splitURL(location.pathname, layer);
   },
   sleep(time) {
     // 需要配合 async/await 使用;
