@@ -59,6 +59,26 @@ const owo = {
       selector.style = this.style;
       logger.info('High lighted class \'' + selector.className + '\'.');
     }
+  },
+  script: {
+    src: [],
+    add(src) {
+      if(typeof src === 'string') {
+        let script  = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src  = src;
+        document.querySelector('head').appendChild(script);
+      }
+    },
+    load() {
+      if(typeof this.src === 'object') {
+        for(i of this.src) {
+          this.add(i);
+        }
+      } else {
+        this.add(this.src);
+      }
+    }
   }
 };
 
@@ -192,3 +212,5 @@ const logger = {
     this.send(message, 'emergency', boom);
   },
 };
+
+export { owo, logger };
