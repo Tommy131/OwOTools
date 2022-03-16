@@ -43,6 +43,7 @@ const owo = {
   highlight: {
     style: 'border: 10px solid red; box-shadow: 0 0 5px 5px #a96464',
     selector: null,
+    name: null,
     select(element) {
       let selector;
       if (typeof element === 'string') {
@@ -53,6 +54,7 @@ const owo = {
         logger.error('Element \'' + element + '\' is undefined!');
         return;
       }
+      this.name     = selector.className ? selector.className : '#' + selector.id;
       this.selector = selector;
       return this;
     },
@@ -63,7 +65,7 @@ const owo = {
       }
       if (typeof func === 'function') func(this);
       this.selector.style = this.style;
-      logger.info('Highlighted class \'' + this.selector.className + '\'.');
+      logger.info('Highlighted element \'' + this.name + '\'.');
     },
     remove(func) {
       if (this.selector === null) {
@@ -72,7 +74,7 @@ const owo = {
       }
       if (typeof func === 'function') func(this);
       this.selector.style = '';
-      logger.info('Removed highlight from \'' + this.selector.className + '\'.');
+      logger.info('Removed highlight from element \'' + this.name + '\'.');
     }
   },
   script: {
@@ -121,7 +123,7 @@ const logger = {
     const fillZero = (number) => { return (number > 0 && number <= 9) ? '0' + number : number; };
     let date = new Date();
     let year = date.getFullYear();
-    let month = date.getMonth();
+    let month = date.getMonth() + 1; // API中月份是从0开始的, 因此需要+1;
     let day = date.getDate();
     let time = '';
     if (this.settings.useTime === true) {
@@ -145,7 +147,7 @@ const logger = {
       text: ['#006057', 'white']
     };
     colorFormat.warning = {
-      prefix: ['#ff7c55', 'white', 'bold'],
+      prefix: ['#ff5722', 'white', 'bold'],
       text: ['#FFDC2F', 'black', '300']
     };
     colorFormat.alert = {
