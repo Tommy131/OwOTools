@@ -22,15 +22,15 @@
  */
 const owo = {
   splitURL(url, layer) {
-		let splitted = url.split('/').filter((e) => { return e; });
-    if(typeof layer === 'number') {
+    let splitted = url.split('/').filter((e) => { return e; });
+    if (typeof layer === 'number') {
       return splitted[layer] ?? undefined;
     }
     switch (layer.toLowerCase()) {
-    case 'first':
-      return splitted.shift();
-    case 'end':
-      return splitted.pop();
+      case 'first':
+        return splitted.shift();
+      case 'end':
+        return splitted.pop();
     }
   },
   path(layer = 'end') {
@@ -41,38 +41,53 @@ const owo = {
     return new Promise((resolve) => setTimeout(resolve, time * 1000));
   },
   highlight: {
-    style:   'border: 10px solid red; box-shadow: 0 0 5px 5px #a96464',
+    style: 'border: 10px solid red; box-shadow: 0 0 5px 5px #a96464',
     selector: null,
-    shoot(element, func) {
+    select(element) {
       let selector;
-      if(typeof element === 'string') {
+      if (typeof element === 'string') {
         selector = document.querySelector(element);
-      }
-      else if(typeof element === 'object') {
+      } else if (typeof element === 'object') {
         selector = element;
       } else {
-        logger.error('Class \'' + element + '\' is undefined!');
+        logger.error('Element \'' + element + '\' is undefined!');
         return;
       }
       this.selector = selector;
-      if(typeof func === 'function') func(this);
-      selector.style = this.style;
-      logger.info('High lighted class \'' + selector.className + '\'.');
+      return this;
+    },
+    shoot(func) {
+      if (this.selector === null) {
+        logger.error('Element is empty, cannot use Highlight function.');
+        return;
+      }
+      if (typeof func === 'function') func(this);
+      this.selector.style = this.style;
+      logger.info('Highlighted class \'' + this.selector.className + '\'.');
+    },
+    remove(func) {
+      if (this.selector === null) {
+        logger.error('Element is empty, cannot use Highlight function.');
+        return;
+      }
+      if (typeof func === 'function') func(this);
+      this.selector.style = '';
+      logger.info('Removed highlight from \'' + this.selector.className + '\'.');
     }
   },
   script: {
     src: [],
     add(src) {
-      if(typeof src === 'string') {
-        let script  = document.createElement('script');
+      if (typeof src === 'string') {
+        let script = document.createElement('script');
         script.type = 'text/javascript';
-        script.src  = src;
+        script.src = src;
         document.querySelector('head').appendChild(script);
       }
     },
     load() {
-      if(typeof this.src === 'object') {
-        for(i of this.src) {
+      if (typeof this.src === 'object') {
+        for (i of this.src) {
           this.add(i);
         }
       } else {
@@ -97,19 +112,19 @@ const logger = {
         return 'background-color: ' + primaryColor + '; color: ' + secondColor + '; font-weight: ' + weight + '; ';
       },
       basePadding: 'padding: 2px 3px; ',
-      level:   '',
+      level: '',
       message: '',
-      time:    ['#424242', 'white', 200]
+      time: ['#424242', 'white', 200]
     },
   },
   date() {
-    const fillZero = (number) => {return (number > 0 && number <= 9) ? '0' + number : number;};
-    let date  = new Date();
-    let year  = date.getFullYear();
+    const fillZero = (number) => { return (number > 0 && number <= 9) ? '0' + number : number; };
+    let date = new Date();
+    let year = date.getFullYear();
     let month = date.getMonth();
-    let day   = date.getDate();
-    let time  = '';
-    if(this.settings.useTime === true) {
+    let day = date.getDate();
+    let time = '';
+    if (this.settings.useTime === true) {
       time = ' ' + fillZero(date.getHours()) + ':' + fillZero(date.getMinutes()) + ':' + fillZero(date.getSeconds());
     }
     return year + this.settings.bindTag + fillZero(month) + this.settings.bindTag + fillZero(day) + time;
@@ -118,42 +133,42 @@ const logger = {
     let colorFormat = {};
     // 颜色编辑区域;
     colorFormat.info = {
-      prefix:   ['#607D8B', 'white', 'bold'],
+      prefix: ['#607D8B', 'white', 'bold'],
       text: ['white']
     };
     colorFormat.notice = {
-      prefix:   ['#15AC', 'white', 'bold'],
+      prefix: ['#15AC', 'white', 'bold'],
       text: ['white']
     };
     colorFormat.success = {
-      prefix:   ['#228329', 'white', 'bold'],
+      prefix: ['#228329', 'white', 'bold'],
       text: ['#006057', 'white']
     };
     colorFormat.warning = {
-      prefix:   ['#ff7c55', 'white', 'bold'],
+      prefix: ['#ff7c55', 'white', 'bold'],
       text: ['#FFDC2F', 'black', '300']
     };
     colorFormat.alert = {
-      prefix:   ['#970000', 'white', 'bold'],
+      prefix: ['#970000', 'white', 'bold'],
       text: ['#FFDC2F', 'black', '300']
     };
     colorFormat.error = {
-      prefix:   ['#830000', 'white', 'bold'],
+      prefix: ['#830000', 'white', 'bold'],
       text: ['#560000', 'white', '300']
     };
     colorFormat.emergency = {
-      prefix:   ['#830000', 'white', 'bold'],
+      prefix: ['#830000', 'white', 'bold'],
       text: ['#560000', 'white', '300']
     };
     // 输出区域;
-    if(colorFormat[level] === undefined) {
+    if (colorFormat[level] === undefined) {
       level = 'info';
     }
     let result = [
       this.settings.style.basePadding + this.settings.style.colorFormat(...colorFormat[level].prefix) + this.settings.style.level,
       this.settings.style.basePadding + this.settings.style.colorFormat(...colorFormat[level].text) + this.settings.style.message
     ];
-    if(this.settings.useDate === true) {
+    if (this.settings.useDate === true) {
       result.unshift(this.settings.style.basePadding + this.settings.style.colorFormat(...this.settings.style.time));
     }
     result[0] += '; border-radius: 3px 0 0 3px;';
@@ -161,7 +176,7 @@ const logger = {
     return result;
   },
   getDateFormat() {
-    if(this.settings.useDate === true) {
+    if (this.settings.useDate === true) {
       return '%c ' + this.date(this.settings.useTime, this.settings.bindTag) + ' ';
     }
     return '';
@@ -169,7 +184,7 @@ const logger = {
   send(message, level = 'info', boom = false) {
     level = level.toLowerCase();
     let consoleOutPutType;
-    switch(level) {
+    switch (level) {
       default:
       case 'info':
       case 'notice':
@@ -177,15 +192,15 @@ const logger = {
       case 'alert':
       case 'error':
         consoleOutPutType = 'log';
-      break;
+        break;
 
       case 'warning':
         consoleOutPutType = 'warn';
-      break;
+        break;
 
       case 'emergency':
         consoleOutPutType = 'error';
-      break;
+        break;
     }
     console[consoleOutPutType](this.getDateFormat() + '%c ' + level.toUpperCase() + ' %c ' + message + ' ', ...this.format(level));
     (boom === true) ? alert(message) : '';
@@ -212,5 +227,3 @@ const logger = {
     this.send(message, 'emergency', boom);
   },
 };
-
-export { owo, logger };
