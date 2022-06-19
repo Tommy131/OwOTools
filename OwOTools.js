@@ -20,7 +20,11 @@
 /**
  * [OwO] 通用方法合集
  */
-const owo = {
+export const owo = {
+  isValidUrl(url) {
+    let reg = /^(http|https):\/\/[0-9a-z\-]+\.[0-9a-z\-]+\.?[a-z]{1,}?\/?|\?(\w\W+)$/i;
+    return reg.test(url);
+  },
   splitURL(url, layer) {
     let splitted = url.split('/').filter((e) => { return e; });
     if (typeof layer === 'number') {
@@ -104,7 +108,7 @@ const owo = {
 /**
  * [Logger] 日志输出对象
  */
-const logger = {
+export const logger = {
   settings: {
     useDate: true,
     useTime: false,
