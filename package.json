@@ -1,0 +1,25 @@
+{
+  "name": "owotools",
+  "version": "1.0.0",
+  "description": "A Repository for OwOBlog in JavaScript.",
+  "main": "OwOTools.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tommy131/OwOTools.git"
+  },
+  "keywords": [
+    "javascript",
+    "tools",
+    "logger",
+    "owoblog"
+  ],
+  "author": "HanskiJay",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Tommy131/OwOTools/issues"
+  },
+  "homepage": "https://github.com/Tommy131/OwOTools#readme"
+}
